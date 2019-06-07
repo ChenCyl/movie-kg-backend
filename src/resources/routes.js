@@ -5,5 +5,6 @@ const api = require('./api')
 
 router.get('/movie/:title', api.getNetByMovieTitle)
 router.get('/person/:name', api.getNetByPersonName)
+router.get('/moives/:limit', api.getMoviesWithLimit)
 
 module.exports = router;

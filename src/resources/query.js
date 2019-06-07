@@ -33,5 +33,21 @@ module.exports = {
     transform(record) {
       return record.get("movie")
     }
+  },
+  GetMoviesWithLimit: class GetMoviesWithLimit {
+    constructor(limit) {
+      this.details = {
+        limit: limit
+      }
+    }
+    get() {
+      return `match (movie:Movie) limit ${this.details.limit} return movie`
+    }
+    parameter() {
+      return this.details;
+    }
+    transform(record) {
+      return record.get("movie")
+    }
   }
 }

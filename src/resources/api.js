@@ -28,6 +28,19 @@ module.exports = {
       }
       res.send({ status: true, entity: result, message: 'Successfully!' })
     })
+  },
+  getMoviesWithLimit: function (req, res, next) {
+    const { limit } = req.params
+    db.execute(new query.GetMoviesWithLimit(limit), (error, result) => {
+      if (error) {
+        res.send({
+          status: false,
+          entity: error,
+          message: 'something went wrong'
+        })
+      }
+      res.send({ status: true, entity: result, message: 'Successfully!' })
+    })
   }
 
 }
