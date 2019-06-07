@@ -1,0 +1,4 @@
+### 通过电影 title 获得图谱
+GET http://localhost:3000/api/movie/假面 Persona HTTP/1.1
+
+### 通过人物 name 获得图谱
