@@ -41,7 +41,7 @@ module.exports = {
       }
     }
     get() {
-      return `match (movie:Movie) limit ${this.details.limit} return movie`
+      return `match (movie:Movie) return movie limit ${this.details.limit}`
     }
     parameter() {
       return this.details;
