@@ -9,11 +9,11 @@ filmsData = JSON.parse(filmsData.toString())
 // 电影
 const movie_fields = [
   {
-    label: 'Id:ID(Movie-ID)',
+    label: 'id:ID(Movie-ID)',
     value: '_id'
   },
   {
-    label: 'title',
+    label: 'name',
     value: 'title'
   },
   {
@@ -33,7 +33,7 @@ const movie_fields = [
 // 导演
 const director_fields = [
   {
-    label: 'Id:ID(Person-ID)',
+    label: 'id:ID(Person-ID)',
     value: (row, field) => {
       if (row.directors.id == 'search') {
         return Math.random() * 1000000 + ''
@@ -49,11 +49,11 @@ const director_fields = [
     label: 'name',
     value: 'directors.name'
   },
-  {
-    label: ':LABEL',
-    value: 'director',
-    default: 'Director'
-  },
+  // {
+  //   label: ':LABEL',
+  //   value: 'director',
+  //   default: 'Director'
+  // },
   {
     label: ':LABEL',
     value: 'person',
@@ -63,7 +63,7 @@ const director_fields = [
 // 演员
 const cast_fields = [
   {
-    label: 'Id:ID(Person-ID)',
+    label: 'id:ID(Person-ID)',
     // value: 'casts.id',
     value: (row, field) => {
       if (row.casts) {
@@ -83,11 +83,11 @@ const cast_fields = [
     label: 'name',
     value: 'casts.name'
   },
-  {
-    label: ':LABEL',
-    value: 'actor',
-    default: 'Actor'
-  },
+  // {
+  //   label: ':LABEL',
+  //   value: 'actor',
+  //   default: 'Actor'
+  // },
   {
     label: ':LABEL',
     value: 'person',
@@ -97,7 +97,7 @@ const cast_fields = [
 // 编剧
 const writer_fields = [
   {
-    label: 'Id:ID(Person-ID)',
+    label: 'id:ID(Person-ID)',
     // value: 'writers.id'
     value: (row, field) => {
       if (row.writers) {
@@ -117,11 +117,11 @@ const writer_fields = [
     label: 'name',
     value: 'writers.name'
   },
-  {
-    label: ':LABEL',
-    value: 'writer',
-    default: 'Writer'
-  },
+  // {
+  //   label: ':LABEL',
+  //   value: 'writer',
+  //   default: 'Writer'
+  // },
   {
     label: ':LABEL',
     value: 'person',

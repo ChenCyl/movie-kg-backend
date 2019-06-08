@@ -3,8 +3,8 @@ const router = express.Router();
 
 const api = require('./api')
 
-router.get('/movie/:title', api.getNetByMovieTitle)
-router.get('/person/:name', api.getNetByPersonName)
+router.get('/:name', api.getNetByName)
 router.get('/movies/:limit', api.getMoviesWithLimit)
+router.get('/people/:limit', api.getPeopleWithLimit)
 
 module.exports = router;
