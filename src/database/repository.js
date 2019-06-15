@@ -13,7 +13,6 @@ driver.onCompleted = function () {
 // This could happen due to wrong credentials or database unavailability:
 driver.onError = function (error) {
     console.log('Driver instantiation failed', error);
-    console.log('Driver instantiation failed', error);
 };
 
 exports.run = function (query, parameter, next) {

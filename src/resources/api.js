@@ -1,22 +1,6 @@
 const db = require('../database/repository');
 const query = require('./query.js');
 module.exports = {
-
-  // getNetByMovieTitle: function (req, res, next) {
-  //   // console.log(req)
-  //   const { title } = req.params;
-  //   const result = db.execute(new query.GetNetByMovieTitle(title), (error, result) => {
-  //     if (error) {
-  //       res.send({
-  //         status: false,
-  //         entity: error,
-  //         message: 'something went wrong'
-  //       })
-  //     }
-  //     // res.send({ status: true, entity: result, message: 'Successfully!' })
-  //     res.send(handleResultByMovieTitle(result))
-  //   });
-  // },
   getNetByName: function (req, res, next) {
     const { name } = req.params
     db.execute(new query.GetNetByName(name), (error, result) => {
@@ -29,9 +13,9 @@ module.exports = {
       }
       res.send({
         status: true,
+        // entity: result
         entity: handleResultByName(result)
       })
-      // res.send({ status: true, entity: result, message: 'Successfully!' })
     })
   },
   getMoviesWithLimit: function (req, res, next) {
@@ -44,16 +28,14 @@ module.exports = {
           message: 'something went wrong'
         })
       }
-      // res.send({ status: true, entity: result, message: 'Successfully!' })
       res.send({
         status: true,
         entity: handleResultWithLimit(result)
       })
     })
   },
-  getPeopleWithLimit: function (req, res, next) {
-    const { limit } = req.params
-    db.execute(new query.GetPeopleWithLimit(limit), (error, result) => {
+  getHighRateMovie: function (req, res, next) {
+    db.execute(new query.GetHighRateMovie(), (error, result) => {
       if (error) {
         res.send({
           status: false,
@@ -61,7 +43,21 @@ module.exports = {
           message: 'something went wrong'
         })
       }
-      // res.send({ status: true, entity: result, message: 'Successfully!' })
+      res.send({
+        status: true,
+        entity: handleResultWithLimit(result)
+      })
+    })
+  },
+  getPeopleFilmMost: function (req, res, next) {
+    db.execute(new query.GetPeopleFilmMost(), (error, result) => {
+      if (error) {
+        res.send({
+          status: false,
+          entity: error,
+          message: 'something went wrong'
+        })
+      }
       res.send({
         status: true,
         entity: handleResultWithLimit(result)
@@ -71,30 +67,36 @@ module.exports = {
 
 }
 
+// 处理含有关系的
 function handleResultByName(results) {
   let result = {
     nodes: [],
     links: []
   }
-  let targetNode = {
-    id: results[0]._fields[0].properties.id,
-    name: results[0]._fields[0].properties.name,
-    type: results[0]._fields[0].labels[0]
-  }
-  // result.nodes.push(targetNode)
   let nodeIds = [] // 用于判断重复节点
   let nodeSet = new Set()
   results.forEach(element => {
+    let targetId = element._fields[0].properties.id
+    if (nodeIds.indexOf(targetId) === -1) {
+      nodeSet.add({
+        id: targetId,
+        name: element._fields[0].properties.name,
+        type: element._fields[0].labels[0],
+        rating: element._fields[0].properties.rating
+      })
+      nodeIds.push(targetId)
+    }
     let sourceId = element._fields[1].properties.id
     if (nodeIds.indexOf(sourceId) === -1) {
       nodeSet.add({
         id: sourceId,
         name: element._fields[1].properties.name,
         type: element._fields[1].labels[0],
+        rating: element._fields[1].properties.rating
       })
       nodeIds.push(sourceId)
     }
-    let linkId = sourceId + targetNode.id
+    let linkId = sourceId + targetId
     if (result.links.find((link, index) => {
       if (link.id === linkId) {
         result.links[index].value = result.links[index].value + '/' + element._fields[2]
@@ -104,70 +106,29 @@ function handleResultByName(results) {
     else {
       result.links.push({
         source: sourceId,
-        target: targetNode.id,
+        target: targetId,
         id: linkId,
-        value: element._fields[2]
+        value: element._fields[2],
       })
     }
   });
   result.nodes = Array.from(nodeSet)
-  result.nodes.push(targetNode)
   return result
 }
 
-// function handleResultByPersonName(results) {
-//   let result = {
-//     nodes: [],
-//     links: []
-//   }
-//   let person = {
-//     id: results[0]._fields[0].properties.id,
-//     name: results[0]._fields[0].properties.name,
-//     type: 'Person'
-
-//   }
-//   // result.nodes.push(movie)
-//   let nodeSet = new Set()
-//   results.forEach(element => {
-//     nodeSet.add({
-//       id: element._fields[1].properties.id,
-//       name: element._fields[1].properties.title,
-//       type: 'Movie',
-
-//     })
-//     let linkId = + person.id + element._fields[1].properties.id
-//     if (result.links.find((link, index) => {
-//       if (link.id === linkId) {
-//         result.links[index].value = result.links[index].value + '/' + element._fields[2]
-//         return true
-//       }
-//     })) { }
-//     else {
-//       result.links.push({
-//         source: person.id,
-//         target: element._fields[1].properties.id,
-//         id: linkId,
-//         value: element._fields[2]
-//       })
-//     }
-//   });
-//   result.nodes = Array.from(nodeSet)
-//   result.nodes.push(person)
-//   return result
-// }
-
+// 处理纯节点的
 function handleResultWithLimit(results) {
   let result = {
     nodes: [],
     links: []
   }
-  // result.nodes.push(movie)
   let nodeSet = new Set()
   results.forEach(element => {
     nodeSet.add({
       id: element._fields[0].properties.id,
       name: element._fields[0].properties.name,
       type: element._fields[0].labels[0],
+      rating: element._fields[0].properties.rating
     })
   });
   result.nodes = Array.from(nodeSet)

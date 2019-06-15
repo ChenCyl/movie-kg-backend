@@ -35,11 +35,16 @@ const director_fields = [
   {
     label: 'id:ID(Person-ID)',
     value: (row, field) => {
-      if (row.directors.id == 'search') {
-        return Math.random() * 1000000 + ''
+      if (row.directors) {
+        if (row.directors.id == 'search') {
+          return Math.random() * 1000000 + ''
+        }
+        else {
+          return row.directors.id
+        }
       }
       else {
-        return row.directors.id
+        return Math.random() * 1000000 + ''
       }
     },
     stringify: true
@@ -229,5 +234,5 @@ bin/neo4j-admin import --nodes /Users/chenyulei/Documents/GitHub/movie-kg-backen
 --relationships /Users/chenyulei/Documents/GitHub/movie-kg-backend/src/assets/rel-acted.csv \
 --relationships /Users/chenyulei/Documents/GitHub/movie-kg-backend/src/assets/rel-written.csv \
 --ignore-duplicate-nodes true \
---ignore-missing-nodes true 
+--ignore-missing-nodes true
 */

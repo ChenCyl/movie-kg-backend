@@ -2,38 +2,20 @@ module.exports = {
   GetNetByName: class GetNetByName {
     constructor(name) {
       this.details = {
-        name: name
+        name: name.replace(/'/g , "\\'" )
       }
     }
-
     get() {
-      return `match (n {name: "${this.details.name}"})-[rel]-(m) return n,m,Type(rel)`
+      // 模糊查询
+      return `match(n)-[rel]-(m) where n.name =~ '.*${this.details.name}.*' return n,m,Type(rel)`      
     }
-
     parameter() {
       return this.details;
     }
-
     transform(record) {
       return record.get("n")
     }
   },
-  // GetNetByPersonName: class GetNetByPersonName {
-  //   constructor(personName) {
-  //     this.details = {
-  //       name: personName
-  //     }
-  //   }
-  //   get() {
-  //     return `match (person:Person {name: "${this.details.name}"})-[rel]-(movie) return person,movie,Type(rel)`
-  //   }
-  //   parameter() {
-  //     return this.details;
-  //   }
-  //   transform(record) {
-  //     return record.get("movie")
-  //   }
-  // },
   GetMoviesWithLimit: class GetMoviesWithLimit {
     constructor(limit) {
       this.details = {
@@ -50,14 +32,29 @@ module.exports = {
       return record.get("movie")
     }
   },
-  GetPeopleWithLimit: class GetPeopleWithLimit {
-    constructor(limit) {
+  GetHighRateMovie: class GetHighRateMovie {
+    constructor() {
       this.details = {
-        limit: limit
       }
     }
     get() {
-      return `match (person:Person) return person limit ${this.details.limit}`
+      return `match (movie:Movie) where movie.rating > '9' return movie`
+    }
+    parameter() {
+      return this.details;
+    }
+    transform(record) {
+      return record.get("movie")
+    }
+  },
+
+  GetPeopleFilmMost: class GetPeopleFilmMost {
+    constructor() {
+      this.details = {
+      }
+    }
+    get() {
+      return `match (movie:Movie)-[]-(person:Person) return person, count(movie) order by count(movie) DESC limit 1`
     }
     parameter() {
       return this.details;
@@ -65,5 +62,5 @@ module.exports = {
     transform(record) {
       return record.get("person")
     }
-  }
+  },
 }
