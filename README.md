@@ -1,4 +1,6 @@
-# movie-kg-backend
+# [movie-kg-backend](https://github.com/ChenCyl/movie-kg-backend)
+
+> :point_right: [Front end​](https://github.com/ChenCyl/movie-kg-frontend)
 
 
 ## How to Start
@@ -125,7 +127,7 @@ eg: GET http://localhost:3000/api/movies/highrate
 
 Get the actor who made the most movies.
 
-eg: http://localhost:3000/api/people/filmmost
+eg: GET http://localhost:3000/api/people/filmmost
 
 ```json
 {
@@ -142,3 +144,8 @@ eg: http://localhost:3000/api/people/filmmost
   }
 }
 ```
+
+## Reference 
+
+Repo: [Crud-nodejs-neo4j](https://github.com/Yashjeet/Crud-nodejs-neo4j), A simple REST apis application to create,read,update and delete user.
+
