@@ -16,7 +16,7 @@
     "jade": "~1.11.0",
     "json2csv": "^4.5.1",
     "mongodb": "^3.2.5",
-    "mongoose": "^5.5.11",
+    "mongoose": "^5.7.5",
     "morgan": "~1.9.1",
     "neo4j-driver": "^1.7.5",
     "node-uuid": "^1.4.8",
